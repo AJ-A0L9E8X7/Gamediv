@@ -17,6 +17,8 @@ RIGHT_FACING = 0
 LEFT_FACING = 1
 
 CHARACTER_SCALING = 0.5
+DIM = 1
+
 
 
 class PlayerCharacter(arcade.Sprite):
@@ -72,7 +74,8 @@ class GameView(arcade.Window):
         self.gui_camera = None
         self.player_sprite_list = None
         self.physics_engine = None
-
+# SpriteList for coins the player can collect
+        self.coin_list = None
         self.player = None
 
 
@@ -95,9 +98,6 @@ class GameView(arcade.Window):
     def setup(self):
         layer_options = {
             "platforms": {
-                "use_spatial_hash": True
-            },
-            "gold": {
                 "use_spatial_hash": True
             },
             "underlayer": {
@@ -126,17 +126,19 @@ class GameView(arcade.Window):
             self.fall_texture_pair
         )
         self.player.center_x = WINDOW_WIDTH / 7
-        self.player.center_y = WINDOW_HEIGHT / 3.1
+        self.player.center_y = WINDOW_HEIGHT / 2
         self.player_sprite_list.append(self.player)
         self.scene.add_sprite("Player", self.player)
 
         self.physics_engine = arcade.PhysicsEnginePlatformer(
             self.player, walls=self.scene["platforms"], gravity_constant=GRAVITY
         )
+        #self.physics_engine = arcade.PhysicsEnginePlatformer(
+        #    self.player, walls=self.scene["underlayer"], gravity_constant=GRAVITY
+        #)
 
         self.camera = arcade.Camera2D()
         self.gui_camera = arcade.Camera2D()
-
         self.background_color = arcade.csscolor.CORNFLOWER_BLUE
 
     def on_draw(self):
@@ -144,7 +146,6 @@ class GameView(arcade.Window):
         self.camera.use()
         self.scene.draw()
         self.gui_camera.use()
-
 
     def on_update(self, delta_time):
         self.physics_engine.update()
