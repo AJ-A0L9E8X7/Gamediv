@@ -12,8 +12,8 @@
             "scale": 2,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 246.5,
-                "y": 452.5
+                "x": 753,
+                "y": 574
             }
         },
         "World1.tsx": {
@@ -30,10 +30,18 @@
         },
         "world1.tmx": {
             "scale": 2,
-            "selectedLayer": 0,
+            "selectedLayer": 3,
             "viewCenter": {
-                "x": 334.5,
-                "y": 896.25
+                "x": 650.5,
+                "y": 682.75
+            }
+        },
+        "world2.tmx": {
+            "scale": 0.75,
+            "selectedLayer": 4,
+            "viewCenter": {
+                "x": 589.3333333333333,
+                "y": 1013.9999999999999
             }
         }
     },
@@ -48,6 +56,7 @@
     ],
     "project": "未命名.tiled-project",
     "recentFiles": [
+        "world2.tmx",
         "Surface.tmx",
         "World1.tsx",
         "World_1_1.tsx",

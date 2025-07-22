@@ -8,15 +8,15 @@ WINDOW_TITLE = "Platformer"
 
 TILE_SCALING = 1.5
 PLAYER_JUMP_SPEED = 20
-GRAVITY = 1
+GRAVITY = 1.5
 
-MOVEMENT_SPEED = 3
+MOVEMENT_SPEED = 6
 UPDATES_PER_FRAME = 5
 
 RIGHT_FACING = 0
 LEFT_FACING = 1
 
-CHARACTER_SCALING = 0.5
+CHARACTER_SCALING = 0.3
 DIM = 1
 
 
@@ -30,6 +30,9 @@ class PlayerCharacter(arcade.Sprite):
         self.walk_textures = walk_texture_pairs
         self.jump_texture_pair = jump_texture_pair
         self.fall_texture_pair = fall_texture_pair
+        
+        
+        
 
         super().__init__(self.idle_texture_pair[0], scale=CHARACTER_SCALING)
 
@@ -67,7 +70,7 @@ class PlayerCharacter(arcade.Sprite):
 class GameView(arcade.Window):
     def __init__(self):
         super().__init__(WINDOW_WIDTH, WINDOW_HEIGHT, WINDOW_TITLE)
-
+        # tiled map
         self.tile_map = None
         self.scene = None
         self.camera = None
@@ -75,7 +78,7 @@ class GameView(arcade.Window):
         self.player_sprite_list = None
         self.physics_engine = None
 # SpriteList for coins the player can collect
-        self.coin_list = None
+        self.layer2_visible = True
         self.player = None
 
 
@@ -140,7 +143,14 @@ class GameView(arcade.Window):
         self.camera = arcade.Camera2D()
         self.gui_camera = arcade.Camera2D()
         self.background_color = arcade.csscolor.CORNFLOWER_BLUE
-
+        
+    def toggle_layers(self):
+        self.layer2_visible = not self.layer2_visible
+ 
+        if "underlayer" in self.scene:
+            for blocks in self.scene["underlayer"]:
+                blocks.visible = self.layer2_visible
+                
     def on_draw(self):
         self.clear()
         self.camera.use()
@@ -148,10 +158,18 @@ class GameView(arcade.Window):
         self.gui_camera.use()
 
     def on_update(self, delta_time):
+        if self.layer2_visible:
+            self.physics_engine = arcade.PhysicsEnginePlatformer(
+                self.player, walls=self.scene["platforms"], gravity_constant=GRAVITY
+            )
+        else:
+            self.physics_engine = arcade.PhysicsEnginePlatformer(
+                self.player, walls=self.scene["platforms"], platforms=self.scene["underlayer"], gravity_constant=GRAVITY
+            )
+            
         self.physics_engine.update()
         self.player_sprite_list.update()
         self.player.update_animation(delta_time)
-
         self.camera.position = self.player.position
 
     def on_key_press(self, key, modifiers):
@@ -165,6 +183,9 @@ class GameView(arcade.Window):
             self.player.change_x = MOVEMENT_SPEED
         elif key in (arcade.key.ESCAPE, arcade.key.Q):
             arcade.close_window()
+        elif key == arcade.key.E:
+            layer_image = 0
+            self.toggle_layers()
 
     def on_key_release(self, key, modifiers):
         if key in (arcade.key.LEFT, arcade.key.RIGHT, arcade.key.A, arcade.key.D):
