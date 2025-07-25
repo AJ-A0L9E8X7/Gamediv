@@ -78,7 +78,7 @@ class GameView(arcade.Window):
         self.player_sprite_list = None
         self.physics_engine = None
 # SpriteList for coins the player can collect
-        self.layer2_visible = True
+        self.layer2_visible = False
         self.player = None
 
 
@@ -160,11 +160,12 @@ class GameView(arcade.Window):
     def on_update(self, delta_time):
         if self.layer2_visible:
             self.physics_engine = arcade.PhysicsEnginePlatformer(
-                self.player, walls=self.scene["platforms"], gravity_constant=GRAVITY
+                self.player, walls=self.scene["platforms"], platforms=self.scene["underlayer"], gravity_constant=GRAVITY
+            
             )
         else:
             self.physics_engine = arcade.PhysicsEnginePlatformer(
-                self.player, walls=self.scene["platforms"], platforms=self.scene["underlayer"], gravity_constant=GRAVITY
+                self.player, walls=self.scene["platforms"], gravity_constant=GRAVITY
             )
             
         self.physics_engine.update()
