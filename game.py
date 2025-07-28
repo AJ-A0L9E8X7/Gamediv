@@ -4,13 +4,13 @@ import os
 # Constants
 WINDOW_WIDTH = 1280
 WINDOW_HEIGHT = 720
-WINDOW_TITLE = "Platformer"
+WINDOW_TITLE = "X&O"
 
 TILE_SCALING = 1.5
-PLAYER_JUMP_SPEED = 20
+PLAYER_JUMP_SPEED = 17
 GRAVITY = 1.5
 
-MOVEMENT_SPEED = 6
+MOVEMENT_SPEED = 5
 UPDATES_PER_FRAME = 5
 
 RIGHT_FACING = 0
@@ -117,6 +117,9 @@ class GameView(arcade.Window):
         )
 
         self.scene = arcade.Scene.from_tilemap(self.tile_map)
+        if "underlayer" in self.scene:
+            for block in self.scene["underlayer"]:
+                block.visible = False
 
 
         self.player_sprite_list = arcade.SpriteList()
@@ -184,6 +187,8 @@ class GameView(arcade.Window):
             self.player.change_x = MOVEMENT_SPEED
         elif key in (arcade.key.ESCAPE, arcade.key.Q):
             arcade.close_window()
+        elif key == arcade.key.X:
+            self.setup()
         elif key == arcade.key.E:
             layer_image = 0
             self.toggle_layers()
