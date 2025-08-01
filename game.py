@@ -177,11 +177,10 @@ class GameView(arcade.View):
             }
         }
 
-        if self.level >= 4:
-            view = GameEndView()
-            self.window.show_view(view)
-        else:   
-            map_path = os.path.join(os.path.dirname(__file__), f"Tiled/world{self.level}.tmx")
+        
+            
+          
+        map_path = os.path.join(os.path.dirname(__file__), f"Tiled/world{self.level}.tmx")
         #map_path = os.path.join(os.path.dirname(__file__), f"Tiled/world3.tmx")
         self.tile_map = arcade.load_tilemap(
             map_path,
@@ -331,6 +330,8 @@ class GameView(arcade.View):
                 self.key = 0
             if self.level >=4:
                 self.level -= 1
+                view = GameEndView()
+                self.window.show_view(view)
             self.reset_score = False
             self.setup()
         
